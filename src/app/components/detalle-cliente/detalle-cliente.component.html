@@ -1,0 +1,48 @@
+<div class="card animated fadeIn espacio">
+    <div class="card-header bg-primary">
+      <h4 class="text-center text-white">Detalle de cliente</h4>
+    </div>
+    <div class="card-body row align-items-center justify-content-center">
+      <div class="col-12 col-md-12 col-lg-6" align="center">
+        <img src="assets/images/user.png" alt="" class="img-fluid" width="300px">
+      </div>
+
+      <div class="col-12 col-md-12 col-lg-6 mt-0 mt-md-4">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th scope="row">Id</th>
+              <td>{{ cliente.id }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Nombres</th>
+              <td>{{ cliente.nombre }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Apellidos</th>
+              <td>{{ cliente.apellido }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Correo</th>
+              <td>{{ cliente.email }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Registrado</th>
+              <td>{{ cliente.createAt }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-4 col-lg-2 mb-2 mb-md-0">
+      <button class="btn btn-primary btn-block" [routerLink]="['/clientes']">Regresar</button>
+    </div>
+    <div class="col-12 col-md-4 col-lg-2 mb-2 mb-md-0">
+      <button class="btn btn-danger btn-block" [routerLink]="['/formulario/', cliente.id]">Editar</button>
+    </div>        
+  </div>
+</div>

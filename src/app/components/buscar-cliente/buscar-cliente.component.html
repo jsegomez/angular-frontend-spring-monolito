@@ -1,0 +1,142 @@
+<div class="container animated fadeIn">
+
+    <div class="row mt-3">
+        <div class="col">
+            <h4 class="text-center">Búsqueda de clientes</h4>
+        </div>
+    </div>
+
+    <div class="row align-items-center justify-content-center mt-3">
+        <div class="col-4">
+            <div class="list-group" id="list-tab" role="tablist">
+                <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list"
+                    href="#id" role="tab" aria-controls="home">Id</a>
+                <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list"
+                    href="#nombres" role="tab" aria-controls="profile">Nombres</a>
+                <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list"
+                    href="#apellidos" role="tab" aria-controls="messages">Apellidos</a>
+                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list"
+                    href="#email" role="tab" aria-controls="settings">Correo</a>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="tab-content" id="nav-tabContent">
+
+                <div class="tab-pane fade show active" id="id" role="tabpanel" aria-labelledby="list-home-list">
+                    <form #formulario="ngForm">
+                        <div class="form-group">
+                            <label for="idCliente">Id Cliente</label>
+                            <input type="number" class="form-control" id="idCliente" [(ngModel)]="idCliente" #id=ngModel
+                                name="id">
+                        </div>
+                        <div class="form-group row justify-content-center">
+                            <div class="col-sm-6">
+                                <button class="btn btn-primary btn-block"
+                                    (click)="buscarPorId(idCliente)">Buscar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="nombres" role="tabpanel" aria-labelledby="list-profile-list">
+                    <form>
+                        <div class="form-group">
+                            <label for="nombre">Nombres</label>
+                            <input 
+                                type="text"
+                                class="form-control"
+                                id="nombre" [(ngModel)]="nombreCliente"                                
+                                #nombre=ngModel name="nombre">
+                        </div>
+                        <div class="form-group row justify-content-center">
+                            <div class="col-sm-6">
+                                <button class="btn btn-primary btn-block"
+                                (click)="buscarPorNombres(nombreCliente)">Buscar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="apellidos" role="tabpanel" aria-labelledby="list-messages-list">
+                    <form>
+                        <div class="form-group">
+                            <label for="apellidos">Apellidos</label>
+                            <input type="text" class="form-control" id="apellidos" [(ngModel)]="apellidoCliente"
+                                #apellidos=ngModel name="apellidos">
+                        </div>
+                        <div class="form-group row justify-content-center">
+                            <div class="col-sm-6">
+                                <button class="btn btn-primary btn-block" (click)="buscarPorApellidos(apellidoCliente)">
+                                    Buscar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="email" role="tabpanel" aria-labelledby="list-settings-list">
+                    <form>
+                        <div class="form-group">
+                            <label for="email">Correo electronico</label>
+                            <input type="text" class="form-control" id="email" [(ngModel)]="correoCliente"
+                                #correo=ngModel name="correo">
+                        </div>
+                        <div class="form-group row justify-content-center">
+                            <div class="col-sm-6">
+                                <button class="btn btn-primary btn-block"
+                                    (click)="buscarPorEmail(correoCliente)">Buscar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center animated fadeIn mt-5" *ngIf="clientes.length > 0">
+        <div class="col-12">
+            <h3 class="text-center">{{ mensaje }}</h3>
+            <table class="table table-hover table-xl">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nombres</th>
+                        <th scope="col">Apellidos</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Editar</th>
+                        <th scope="col">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let cliente of clientes">
+                        <th scope="row">
+                            <a class="btn btn-sm btn-primary text-white" [routerLink]="['/detalle/', cliente.id]">
+                                {{ cliente.id }}
+                            </a>
+                        </th>
+                        <td>{{ cliente.nombre }}</td>
+                        <td>{{ cliente.apellido }}</td>
+                        <td>{{ cliente.email }}</td>
+                        <td>{{ cliente.createAt }}</td>
+                        <td>
+                            <a class="mx-2 text-primary p-2" align="center" type="buttom"
+                                [routerLink]="['/formulario/', cliente.id]">
+                                <i class="fas fa-user-edit"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="mx-2 text-danger p-2" align="center" type="buttom" (click)="eliminarCliente(cliente)">
+                                <i class="fas fa-user-times"></i>
+                            </a>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,36 @@
+@media(min-width: 480px){
+    .margenes{
+        margin: 20px 5px;
+    }
+}
+
+@media(min-width: 800px){
+    .margenes{
+        margin: 20px 50px;
+    }
+}
+
+@media(min-width: 1024px){
+    .margenes{
+        margin: 20px 80px;
+    }
+}
+
+@media(min-width: 1200px){
+    .margenes{
+        margin: 20px 150px;
+    }
+}
+
+
+@media(min-width: 1400px){
+    .margenes{
+        margin: 20px 200px;
+    }
+}
+
+@media(min-width: 1600px){
+    .margenes{
+        margin: 20px 350px;
+    }
+}

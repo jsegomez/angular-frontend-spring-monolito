@@ -1,0 +1,35 @@
+@media(min-width: 480px){
+    .espacio{
+        margin: 20px 20px;
+    }
+}
+
+@media(min-width: 900px){
+    .espacio{
+        margin: 30px 30px;
+    }
+}
+
+@media(min-width: 1200px){
+    .espacio{
+        margin: 30px 130px;
+    }
+}
+
+@media(min-width: 1500px){
+    .espacio{
+        margin: 30px 200px;
+    }
+}
+
+@media(min-width: 1800px){
+    .espacio{
+        margin: 30px 340px;
+    }
+}
+
+@media(min-width: 2000px){
+    .espacio{
+        margin: 30px 350px;
+    }
+}

@@ -1,8 +1,9 @@
-import { Cliente } from './../../models/cliente';
+import { Cliente } from '../../../../models/cliente';
 import { Component, OnInit } from '@angular/core';
-import { ClienteService } from '../../services/clientes.service';
+import { ClienteService } from '../../../../services/clientes.service';
 import Swal from 'sweetalert2';
-import { catchError } from 'rxjs/operators';
+import { NgModel } from '@angular/forms';
+
 
 @Component({
   selector: 'app-buscar-cliente',

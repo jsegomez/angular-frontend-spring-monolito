@@ -112,17 +112,17 @@
                 <tbody>
                     <tr *ngFor="let cliente of clientes">
                         <th scope="row">
-                            <a class="btn btn-sm btn-primary text-white" [routerLink]="['/detalle/', cliente.id]">
+                            <a class="btn btn-sm btn-primary text-white" [routerLink]="['/clientes/detalle/', cliente.id]">
                                 {{ cliente.id }}
                             </a>
                         </th>
                         <td>{{ cliente.nombre }}</td>
                         <td>{{ cliente.apellido }}</td>
                         <td>{{ cliente.email }}</td>
-                        <td>{{ cliente.createAt }}</td>
+                        <td>{{ cliente.createAt | date:'dd-MM-yyyy'}}</td>
                         <td>
                             <a class="mx-2 text-primary p-2" align="center" type="buttom"
-                                [routerLink]="['/formulario/', cliente.id]">
+                                [routerLink]="['/clientes/formulario/', cliente.id]">
                                 <i class="fas fa-user-edit"></i>
                             </a>
                         </td>

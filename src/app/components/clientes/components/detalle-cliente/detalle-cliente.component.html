@@ -28,7 +28,7 @@
             </tr>
             <tr>
               <th scope="row">Registrado</th>
-              <td>{{ cliente.createAt }}</td>
+              <td>{{ cliente.createAt | date:'dd-MM-yyyy'}}</td>
             </tr>
           </tbody>
         </table>
@@ -39,10 +39,10 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-12 col-md-4 col-lg-2 mb-2 mb-md-0">
-      <button class="btn btn-primary btn-block" [routerLink]="['/clientes']">Regresar</button>
+      <button class="btn btn-primary btn-block" [routerLink]="['/clientes/pagina/0']">Regresar</button>
     </div>
     <div class="col-12 col-md-4 col-lg-2 mb-2 mb-md-0">
-      <button class="btn btn-danger btn-block" [routerLink]="['/formulario/', cliente.id]">Editar</button>
+      <button class="btn btn-danger btn-block" [routerLink]="['/clientes/formulario/', cliente.id]">Editar</button>
     </div>        
   </div>
 </div>

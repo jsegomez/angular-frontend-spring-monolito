@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Cliente } from '../../models/cliente';
-import { ClienteService } from '../../services/clientes.service';
+import { Cliente } from '../../../../models/cliente';
+import { ClienteService } from '../../../../services/clientes.service';
+import { ActivatedRoute } from '@angular/router';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -11,17 +13,31 @@ import Swal from 'sweetalert2';
 export class ClientesComponent implements OnInit {
 
   clientes: Cliente[];
+  pagina: number;
 
-  constructor(private clienteService: ClienteService) { }
+  constructor(
+    private valorRuta: ActivatedRoute,
+    private clienteService: ClienteService
+  ) { }
 
   ngOnInit(): void {
     this.cargarClientes();
   }
 
   cargarClientes = () => {
-    this.clienteService.getClientes().subscribe(
-      clientes => this.clientes = clientes
-    );
+    this.valorRuta.params.subscribe(
+      params => {
+        if(params.id == null){
+          this.pagina = 0;
+        }
+
+        this.pagina = params.id;
+
+        this.clienteService.getClientes(this.pagina).subscribe(
+          respuesta => this.clientes = respuesta.content
+        )
+      }
+    )
   }
 
   delete(cliente: Cliente){
@@ -40,11 +56,12 @@ export class ClientesComponent implements OnInit {
             this.clientes = this.clientes.filter(nuevoArregloCliente => nuevoArregloCliente !== cliente)
           }
         );
-        Swal.fire(
-          'Eliminado!',
-          `Cliente ${cliente.nombre} ${cliente.apellido} eliminado con éxito`,
-          'success'
-        )
+        Swal.fire({
+          title: 'Cliente eliminado con éxito',
+          text: `${cliente.nombre} ${cliente.apellido}`,
+          icon: 'success',
+          timer: 1500
+        })
       }
     })
 

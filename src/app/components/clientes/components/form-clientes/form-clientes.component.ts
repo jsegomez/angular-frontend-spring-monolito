@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ClienteService } from '../../services/clientes.service';
+import { ClienteService } from '../../../../services/clientes.service';
 import { Cliente } from 'src/app/models/cliente';
-import { NgForm, NgModel } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2'
 
@@ -51,7 +51,7 @@ export class FormClientesComponent implements OnInit {
 
     this.servicioCliente.update(this.cliente).subscribe(
       respuesta => {
-        this.router.navigate([`/detalle/${respuesta.cliente.id}`]);
+        this.router.navigate([`clientes/detalle/${respuesta.cliente.id}`]);
         Swal.fire({
           position: 'center',
           icon: 'success',
@@ -76,7 +76,7 @@ export class FormClientesComponent implements OnInit {
 
     this.servicioCliente.create(this.cliente).subscribe(
       respuesta => {
-        this.router.navigate(['/detalle/', respuesta.cliente.id]);
+        this.router.navigate(['/clientes/detalle/', respuesta.cliente.id]);
         Swal.fire({
           position: 'center',
           icon: 'success',

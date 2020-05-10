@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClienteService } from '../../services/clientes.service';
+import { ClienteService } from '../../../../services/clientes.service';
 import { Cliente } from 'src/app/models/cliente';
 
 @Component({

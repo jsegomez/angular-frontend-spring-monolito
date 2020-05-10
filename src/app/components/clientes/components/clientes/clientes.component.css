@@ -1,0 +1,51 @@
+.eliminar{
+    cursor: pointer;
+}
+
+@media(min-width: 360px){
+    .containerPersonal{
+        margin: 10px 10px ;
+    }
+}
+
+@media(min-width: 480px){
+    .containerPersonal{
+        margin: 20px 30px ;
+    }
+}
+
+@media(min-width: 800px){
+    .containerPersonal{
+        margin: 20px 40px ;
+    }
+}
+
+@media(min-width: 1024px){
+    .containerPersonal{
+        margin: 20px 50px ;
+    }
+}
+
+@media(min-width: 1200px){
+    .containerPersonal{
+        margin: 20px 60px ;
+    }
+}
+
+@media(min-width: 1400px){
+    .containerPersonal{
+        margin: 20px 70px ;
+    }
+}
+
+@media(min-width: 1600px){
+    .containerPersonal{
+        margin: 20px 90px ;
+    }
+}
+
+@media(min-width: 1800px){
+    .containerPersonal{
+        margin: 20px 120px ;
+    }
+}

@@ -5,9 +5,6 @@ import { Observable, throwError  } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { error } from '@angular/compiler/src/util';
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +18,20 @@ export class ClienteService {
 
   // ======================= Métodos para Get =======================
 
-  getClientes(): Observable<Cliente[]>{
-    return this.http.get<Cliente[]>(`${this.urlEndPoint}/clientes`);
+  getClientes(pagina: number): Observable<any>{
+    return this.http.get(`${this.urlEndPoint}/clientes/pagina/${pagina}`).pipe(
+      catchError(e => {
+        this.router.navigate(['/formulario']);
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: `${e.error.mensaje}`,
+          showConfirmButton: true,
+          timer: 3500
+        });
+        return throwError(e);
+      })
+    );
   }
 
 
@@ -102,10 +111,12 @@ export class ClienteService {
   create(cliente: Cliente): Observable<any>{
     return this.http.post<Cliente>(`${this.urlEndPoint}/cliente`, cliente, {headers: this.httpHeaders}).pipe(
       catchError( e => {
+        console.log(e.error.error)
         Swal.fire({
           position: 'center',
           icon: 'error',
-          text: `${e.error.mensaje}`,
+          title: `${e.error.mensaje}`,
+          text: `text: ${e.error.error}`,
           showConfirmButton: true,
           timer: 4000
         });
@@ -123,7 +134,15 @@ export class ClienteService {
           return throwError(e);
         }
 
-        Swal.fire('Error al actualizar cliente', e.error.mensaje, 'error');
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: `${e.error.mensaje}`,
+          text: `text: ${e.error.error}`,
+          showConfirmButton: true,
+          timer: 4000
+        });
+
         return throwError(e);
       })
     );

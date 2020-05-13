@@ -2,6 +2,7 @@
     cursor: pointer;
 }
 
+
 @media(min-width: 360px){
     .containerPersonal{
         margin: 10px 10px ;

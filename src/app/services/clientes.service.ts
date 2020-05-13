@@ -70,8 +70,8 @@ export class ClienteService {
     );
   }
 
-  buscarPorApellidos(apellidos: string): Observable<Cliente[]>{
-    return this.http.get<Cliente[]>(`${this.urlEndPoint}/clientes/apellidos/${apellidos}`).pipe(
+  buscarPorApellidos(apellidos: string): Observable<any>{
+    return this.http.get<any>(`${this.urlEndPoint}/clientes/apellidos/${apellidos}`).pipe(
       catchError( e => {
         Swal.fire({
           position: 'center',
@@ -87,10 +87,9 @@ export class ClienteService {
     );
   }
 
-  buscarPorEmail(email: string): Observable<Cliente[]>{
-    return this.http.get<Cliente[]>(`${this.urlEndPoint}/clientes/email/${email}`).pipe(
+  buscarPorEmail(email: string): Observable<any>{
+    return this.http.get<any>(`${this.urlEndPoint}/clientes/email/${email}`).pipe(
       catchError( e => {
-        if(e.status === 404){
           Swal.fire({
             position: 'center',
             icon: 'error',
@@ -98,8 +97,7 @@ export class ClienteService {
             text: `${e.error.mensaje}`,
             showConfirmButton: true,
             timer: 4000
-          });
-        }
+        })
         return throwError(e);
       })
     );

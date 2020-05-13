@@ -49,9 +49,10 @@ export class BuscarClienteComponent implements OnInit {
 
   buscarPorApellidos(apellidos: string){
     this.servicioCliente.buscarPorApellidos(apellidos).subscribe(
-      clientes => {
+      respuesta => {
         this.resultado = true;
-        this.clientes = clientes
+        this.mensaje = respuesta.mensaje
+        this.clientes = respuesta.clientes
         this.apellidoCliente = '';
       }
     )
@@ -59,9 +60,10 @@ export class BuscarClienteComponent implements OnInit {
 
   buscarPorEmail(correo: string){
     this.servicioCliente.buscarPorEmail(correo).subscribe(
-      clientes => {
+      respuesta => {
         this.resultado = true;
-        this.clientes = clientes;
+        this.mensaje = respuesta.mensaje
+        this.clientes = respuesta.clientes
         this.correoCliente = '';
       }
     )

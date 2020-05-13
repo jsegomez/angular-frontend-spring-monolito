@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Cliente } from '../../../../models/cliente';
 import { ClienteService } from '../../../../services/clientes.service';
 import { ActivatedRoute } from '@angular/router';
-
 import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-clientes',
@@ -13,7 +13,8 @@ import Swal from 'sweetalert2';
 export class ClientesComponent implements OnInit {
 
   clientes: Cliente[];
-  pagina: number;
+  paginas: any;
+
 
   constructor(
     private valorRuta: ActivatedRoute,
@@ -27,14 +28,11 @@ export class ClientesComponent implements OnInit {
   cargarClientes = () => {
     this.valorRuta.params.subscribe(
       params => {
-        if(params.id == null){
-          this.pagina = 0;
-        }
-
-        this.pagina = params.id;
-
-        this.clienteService.getClientes(this.pagina).subscribe(
-          respuesta => this.clientes = respuesta.content
+        this.clienteService.getClientes(params.id).subscribe(
+          respuesta => {
+            this.clientes  = respuesta.content,
+            this.paginas = respuesta;
+          }
         )
       }
     )

@@ -1,7 +1,7 @@
 <div class="containerPersonal">
   <div class="row justify-content-center animated fadeIn">
     <div class="col">
-      <table class="table table-hover table-xl">
+      <table class="table table-hover table-sm">
         <thead class="bg-primary text-white">
           <tr>
             <th scope="col">Id</th>
@@ -25,19 +25,27 @@
             <td>{{ cliente.email }}</td>
             <td>{{ cliente.createAt | date:'dd-MM-yyyy'}}</td>
             <td>
-              <a class="mx-2 text-primary p-2" align="center" type="buttom" [routerLink]="['/clientes/formulario/', cliente.id]">
-                <i class="fas fa-user-edit"></i>
+              <a class="mx-2 text-primary" align="center" type="buttom" [routerLink]="['/clientes/formulario/', cliente.id]">
+                <i class="fas fa-user-edit p-2"></i>
               </a>
             </td>
             <td>
-              <a class="mx-2 text-danger p-2 eliminar" align="center" type="buttom">
-                <i class="fas fa-user-times" (click)="delete(cliente)"></i>
+              <a class="mx-2 text-danger eliminar" align="center" type="buttom">
+                <i class="fas fa-user-times p-2" (click)="delete(cliente)"></i>
               </a>
             </td>
           </tr>
 
         </tbody>
       </table>
+    </div>  
+
+  </div>
+
+  <div class="row">
+    <div class="col" align="center">
+      <app-paginador *ngIf="paginas" [paginas]="paginas"></app-paginador>
     </div>
   </div>
+
 </div>

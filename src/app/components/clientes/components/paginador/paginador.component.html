@@ -1,5 +1,5 @@
-<nav class="paginador" aria-label="Page navigation example">
-  <ul class="pagination p-0 m-0" align="center">
+<div class="paginador" aria-label="Page navigation example" align="center">
+  <ul class="pagination" >
     
     <li [className]="paginas.first ? 'page-item disabled' : 'page-item'">
       <a 
@@ -19,8 +19,11 @@
     </li>
 
     <li class="page-item" [className]="paginas.last ? 'page-item disabled' : 'page-item'">
-      <a class="page-link" href="#" tabindex="-1" aria-disabled="true" [routerLink]="['/clientes/pagina/', paginas.number + 1]">Siguiente</a>
+      <a class="page-link" [routerLink]="['/clientes/pagina/', paginas.number + 1]">
+        Siguiente
+      </a>
     </li>
 
   </ul>
-</nav>
+</div>
+

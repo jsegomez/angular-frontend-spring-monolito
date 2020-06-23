@@ -10,6 +10,7 @@ export class PaginadorComponent implements OnInit, OnChanges {
 
   @Input() paginas: any;
   arregloPaginas: number[];
+  paginaActual: number;
 
   desde: number;
   hasta: number;
@@ -20,11 +21,14 @@ export class PaginadorComponent implements OnInit, OnChanges {
     this.cargarPaginador();
   }
 
-  ngOnInit(): void { };
+  ngOnInit(): void {
+    this.cargarPaginador()
+  };
 
   cargarPaginador() {
-    this.desde =  Math.min(Math.max(1, this.paginas.number - 10), this.paginas.totalPages - 10);
-    this.hasta =  Math.max(Math.min(this.paginas.totalPages, this.paginas.number + 10), 20);
+
+    this.desde = Math.min(Math.max(1, this.paginas.number - 9), this.paginas.totalPages - 11);
+    this.hasta = Math.max(Math.min(this.paginas.totalPages, this.paginas.number + 9), 20);
 
     if(this.paginas.totalPages > 20){
       this.arregloPaginas = new Array(this.hasta - this.desde + 1).fill(0)
@@ -34,5 +38,6 @@ export class PaginadorComponent implements OnInit, OnChanges {
       .map( (_valor, indice) => indice + 1)
     }
   }
-
 }
+
+

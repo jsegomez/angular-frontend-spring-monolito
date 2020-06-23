@@ -1,117 +1,121 @@
-<div class="card mt-5 margenes animated fadeIn">
-    <div class="card-header bg-primary text-white">
-        <h4 class="text-center">Registro de cliente</h4>
+<div class="container">
+    <div class="card mt-5 margenes animated fadeIn">
+        <div class="card-header bg-primary text-white">
+            <h4 class="text-center">Registro de cliente</h4>
+        </div>
+        <div class="card-body p-5 row justify-content-center">
+
+            <div class="col-12 col-lg-6" align="center" *ngIf="cliente.foto == null">
+                <img src="assets/images/user.png" alt="" class="img-fluid" width="300px">
+            </div>
+
+            <div class="col-12 col-lg-6" align="center" *ngIf="cliente.foto != null">
+                <img src="http://localhost:8080/api/upload/img/{{ cliente.foto}}" alt="" class="img-fluid"
+                    width="300px">
+            </div>
+
+            <form autocomplete="off" class="col-12 col-lg-6 m-0 p-0" #formulario="ngForm">
+                <div class="form-group row">
+                    <label for="nombre" class="col-sm-3 col-form-label">Nombres</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombres" required
+                            value="cliente.nombre" #nombre="ngModel" minlength="2" [(ngModel)]="cliente.nombre"
+                            [ngClass]="{'is-invalid animated shake':
+                            nombre.invalid && nombre.touched}">
+                        <small *ngIf="nombre.errors?.required && nombre.touched" class="text-danger">
+                            *Por favor ingrese el nombre del cliente
+                        </small>
+                        <small *ngIf="nombre.errors?.minlength &&
+                            nombre.touched" class="text-danger">
+                            *Debe contener al menos dos caracteres
+                        </small>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label for="apellido" class="col-sm-3 col-form-label">Apellidos</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellidos"
+                            value="cliente.apellido" #apellido="ngModel" required minlength="3"
+                            [(ngModel)]="cliente.apellido" [ngClass]="{'is-invalid animated shake':
+                            apellido.invalid && apellido.touched}">
+                        <small *ngIf="apellido.errors?.required &&
+                            apellido.touched" class="text-danger">
+                            *Por favor el apellido del cliente
+                        </small>
+                        <small *ngIf="apellido.errors?.minlength &&
+                            apellido.touched" class="text-danger">
+                            *Debe contener al menos tres caracteres
+                        </small>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label for="email" class="col-sm-3 col-form-label">Correo</label>
+                    <div class="col-sm-8">
+                        <input type="email" class="form-control" id="email" name="email"
+                            placeholder="Correo electronico" value="cliente.email" #email="ngModel" required
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" [(ngModel)]="cliente.email" [ngClass]="{'is-invalid animated shake':
+                            email.invalid && email.touched}">
+                        <small *ngIf="email.errors?.pattern && email.touched" class="text-danger">
+                            *Formato de correo invalido
+                        </small>
+                        <small *ngIf="email.errors?.required && email.touched" class="text-danger">
+                            *Por favor ingrese correo electronico
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="region" class="col-sm-3 col-form-label">Región</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <select [compareWith]="compararRegion" class="custom-select" name="region" id="region"
+                                [(ngModel)]="cliente.region" #region="ngModel" required [ngClass]="{'is-invalid animated shake':
+                            region.invalid && region.touched}">
+                                <option [ngValue]="undefined">Seleccionar...</option>
+                                <option *ngFor="let region of regiones" [ngValue]="region">
+                                    {{ region.nombre }}
+                                </option>
+                            </select>
+                        </div>
+                        <small *ngIf="region.errors?.required && region.touched" class="text-danger">
+                            *Por favor, seleccionar región
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="createAt" class="col-sm-3 col-form-label">Fecha</label>
+                    <div class="col-sm-8">
+                        <input type="date" class="form-control" id="createAt" name="createAt"
+                            [(ngModel)]="cliente.createAt" #fecha=ngModel required [ngClass]="{'is-invalid animated shake':
+                            fecha.invalid && fecha.touched}">
+                        <small *ngIf="fecha.errors?.required && fecha.touched" class="text-danger">
+                            *Favor ingrese la fecha
+                        </small>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center mt-5">
+                    <div class="col-12" align="center">
+                        <button class="btn btn-primary mx-2 px-5 mb-3 mb-lg-0" (click)="create(formulario)"
+                            *ngIf="!cliente.id">
+                            Registrar
+                        </button>
+                        <button class="btn btn-primary mx-2 px-5 mb-3 mb-lg-0" (click)="update(formulario)"
+                            *ngIf="cliente.id">
+                            Completar
+                        </button>
+
+                        <button class="btn btn-danger mx-2 px-5" [routerLink]="['/clientes/detalle/',
+                            cliente.id]">Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="card-body p-5 row justify-content-center">
-        <form autocomplete="off" class="col-10" #formulario="ngForm">
-            <div class="form-group row">
-                <label for="nombre" class="col-sm-3 col-form-label">Nombres</label>
-                <div class="col-sm-8">
-                    <input 
-                        type="text"
-                        class="form-control"
-                        id="nombre"
-                        name="nombre"
-                        placeholder="Nombres"
-                        required
-                        value="cliente.nombre"
-                        #nombre="ngModel"
-                        minlength="5"
-                        [(ngModel)]="cliente.nombre"
-                        [ngClass]="{'is-invalid animated shake': nombre.invalid && nombre.touched}"                        
-                    >
-                    <small *ngIf="nombre.errors?.required && nombre.touched" class="text-danger">
-                        *Por favor ingrese el nombre del cliente
-                    </small>
-                    <small *ngIf="nombre.errors?.minlength && nombre.touched" class="text-danger">
-                        *Debe contener al menos dos caracteres
-                    </small>
-                </div>
-            </div>
 
-
-            <div class="form-group row">
-                <label for="apellido" class="col-sm-3 col-form-label">Apellidos</label>
-                <div class="col-sm-8">
-                    <input 
-                        type="text"
-                        class="form-control"
-                        id="apellido"
-                        name="apellido"
-                        placeholder="Apellidos"
-                        value="cliente.apellido"
-                        #apellido="ngModel"
-                        required
-                        minlength="3"                        
-                        [(ngModel)]="cliente.apellido"
-                        [ngClass]="{'is-invalid animated shake': apellido.invalid && apellido.touched}"
-                    >
-                    <small *ngIf="apellido.errors?.required && apellido.touched" class="text-danger">
-                        *Por favor el apellido del cliente
-                    </small>
-                    <small *ngIf="apellido.errors?.minlength && apellido.touched" class="text-danger">
-                        *Debe contener al menos tres caracteres
-                    </small>            
-                </div>
-            </div>
-
-
-            <div class="form-group row">
-                <label for="email" class="col-sm-3 col-form-label">Correo</label>
-                <div class="col-sm-8">
-                    <input
-                        type="email"
-                        class="form-control"
-                        id="email"
-                        name="email"
-                        placeholder="Correo electronico"
-                        value="cliente.email"
-                        #email="ngModel"
-                        required                        
-                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-                        [(ngModel)]="cliente.email"
-                        [ngClass]="{'is-invalid animated shake': email.invalid && email.touched}"
-                    >
-                    <small *ngIf="email.errors?.pattern && email.touched" class="text-danger">
-                        *Formato de correo invalido
-                    </small>
-                    <small *ngIf="email.errors?.required && email.touched" class="text-danger">
-                        *Por favor ingrese correo electronico
-                    </small>                          
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="createAt" class="col-sm-3 col-form-label">Fecha</label>
-                <div class="col-sm-5">
-                    <input 
-                        type="date"
-                        class="form-control"
-                        id="createAt"
-                        name="createAt"
-                        [(ngModel)]="cliente.createAt"
-                        #fecha=ngModel
-                        required
-                        [ngClass]="{'is-invalid animated shake': fecha.invalid && fecha.touched}"
-                    >
-                    <small *ngIf="fecha.errors?.required && fecha.touched" class="text-danger">
-                        *Favor ingrese la fecha
-                    </small>
-                </div>
-            </div>
-
-            <div class="row justify-content-center mt-5">
-                <div class="col-12 col-md-10" align="center">
-                    <button class="btn btn-primary mx-2 px-5 mb-3 mb-lg-0" (click)="create(formulario)" *ngIf="!cliente.id">
-                        Registrar
-                    </button>
-                    <button class="btn btn-primary mx-2 px-5 mb-3 mb-lg-0" (click)="update(formulario)" *ngIf="cliente.id">
-                        Actualizar
-                    </button>
-
-                    <button class="btn btn-danger mx-2 px-5 " [routerLink]="['/clientes/pagina/0']">Cancelar</button>
-                </div>
-            </div>
-        </form>
-    </div>
 </div>

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
 import { Cliente } from '../models/cliente';
-import { Observable, throwError  } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { Region } from '../models/region';
 
 @Injectable({
   providedIn: 'root'
@@ -14,38 +15,53 @@ export class ClienteService {
   constructor(private http: HttpClient, private router: Router) { }
 
   private urlEndPoint = 'http://localhost:8080/api';
-  private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+  private isNoAutorizado(e): boolean{
+    if(e.status==401 || e.status==403){
+      this.router.navigate(['/login'])
+      return true;
+    }
+    return false;
+  }
 
   // ======================= Métodos para Get =======================
 
-  getClientes(pagina: number): Observable<any>{
+  // Método para mostrar todos los clientes paginados
+  getClientes(pagina: number): Observable<any> {
     return this.http.get(`${this.urlEndPoint}/clientes/pagina/${pagina}`).pipe(
       catchError(e => {
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
         this.router.navigate(['/formulario']);
         Swal.fire({
           position: 'center',
           icon: 'error',
           title: `${e.error.mensaje}`,
           showConfirmButton: true,
-          timer: 3500
+          timer: 2500
         });
         return throwError(e);
       })
     );
   }
 
-
-  getCliente(id: number): Observable<Cliente>{
-    return this.http.get(`${this.urlEndPoint}/cliente/${id}`).pipe(
-      map( (response: any) => response.cliente as Cliente),
+  // Ver detalle de un cliente
+  getCliente(id: number): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.urlEndPoint}/clientes/${id}`).pipe(
+      map((response: any) => response.cliente as Cliente),
       catchError(e => {
-        this.router.navigate(['/buscar']);
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
+        this.router.navigate(['/clientes/buscar']);
         Swal.fire({
           position: 'center',
           icon: 'error',
           title: `${e.error.mensaje}`,
           showConfirmButton: true,
-          timer: 3500
+          timer: 2000
         });
 
         return throwError(e);
@@ -53,16 +69,20 @@ export class ClienteService {
     );
   }
 
-  buscarPorNombres(nombres: string): Observable<any>{
+  // Método para búsqueda por nombre
+  buscarPorNombres(nombres: string): Observable<any> {
     return this.http.get<Cliente[]>(`${this.urlEndPoint}/clientes/nombres/${nombres}`).pipe(
-      catchError( e => {
+      catchError(e => {
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
         Swal.fire({
           position: 'center',
           icon: 'error',
           title: `No hay resultados para ${nombres}`,
           text: `${e.error.mensaje}`,
           showConfirmButton: true,
-          timer: 4000
+          timer: 2500
         });
 
         return throwError(e);
@@ -70,9 +90,13 @@ export class ClienteService {
     );
   }
 
-  buscarPorApellidos(apellidos: string): Observable<any>{
+  // Método para búsqueda por apellido
+  buscarPorApellidos(apellidos: string): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}/clientes/apellidos/${apellidos}`).pipe(
-      catchError( e => {
+      catchError(e => {
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
         Swal.fire({
           position: 'center',
           icon: 'error',
@@ -87,17 +111,31 @@ export class ClienteService {
     );
   }
 
-  buscarPorEmail(email: string): Observable<any>{
+  // Método para búsqueda por correo electrónico
+  buscarPorEmail(email: string): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}/clientes/email/${email}`).pipe(
-      catchError( e => {
-          Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: `No hay resultados para ${email}`,
-            text: `${e.error.mensaje}`,
-            showConfirmButton: true,
-            timer: 4000
+      catchError(e => {
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: `No hay resultados para ${email}`,
+          text: `${e.error.mensaje}`,
+          showConfirmButton: true,
+          timer: 4000
         })
+        return throwError(e);
+      })
+    );
+  }
+
+  // Método para obtener regiones
+  getRegiones(): Observable<Region[]> {
+    return this.http.get<Region[]>(`${this.urlEndPoint}/clientes/regiones`).pipe(
+      catchError(e => {
+        this.isNoAutorizado(e);
         return throwError(e);
       })
     );
@@ -106,17 +144,19 @@ export class ClienteService {
   // ======================= Demás métodos CRUD =======================
 
   // Método para crear un cliente
-  create(cliente: Cliente): Observable<any>{
-    return this.http.post<Cliente>(`${this.urlEndPoint}/cliente`, cliente, {headers: this.httpHeaders}).pipe(
-      catchError( e => {
-        console.log(e.error.error)
+  create(cliente: Cliente): Observable<any> {
+    return this.http.post<Cliente>(`${this.urlEndPoint}/clientes`, cliente, { headers: this.httpHeaders }).pipe(
+      catchError(e => {
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }        
         Swal.fire({
           position: 'center',
           icon: 'error',
           title: `${e.error.mensaje}`,
           text: `text: ${e.error.error}`,
           showConfirmButton: true,
-          timer: 4000
+          timer: 2500
         });
 
         return throwError(e);
@@ -125,13 +165,12 @@ export class ClienteService {
   }
 
   // Método para actualizar un cliente
-  update(cliente: Cliente): Observable<any>{
-    return this.http.put<Cliente>(`${this.urlEndPoint}/cliente/${cliente.id}`,cliente,{headers: this.httpHeaders}).pipe(
-      catchError( e => {
-        if(e.status === 400){
+  update(cliente: Cliente): Observable<any> {
+    return this.http.put<Cliente>(`${this.urlEndPoint}/clientes/${cliente.id}`, cliente, { headers: this.httpHeaders }).pipe(
+      catchError(e => {
+        if(this.isNoAutorizado(e)){
           return throwError(e);
         }
-
         Swal.fire({
           position: 'center',
           icon: 'error',
@@ -147,8 +186,39 @@ export class ClienteService {
   }
 
   // Método para eliminar un cliente
-  delete(id: number){
-    return this.http.delete<Cliente>(`${this.urlEndPoint}/cliente/${id}`, {headers: this.httpHeaders})
+  delete(id: number) {
+    return this.http.delete<Cliente>(`${this.urlEndPoint}/clientes/${id}`, { headers: this.httpHeaders }).pipe(
+      catchError(e=>{
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
+      })
+    )
   }
 
+  // Método para cargar una imagen
+  subirFoto(archivo: File, id: any): Observable<HttpEvent<{}>> {
+    // tslint:disable-next-line: prefer-const
+    let formData = new FormData();
+    formData.append('archivo', archivo);
+    formData.append('id', id);
+
+    const req = new HttpRequest('POST', `${this.urlEndPoint}/clientes/upload`, formData, {
+      reportProgress: true
+    });
+
+    try {
+      return this.http.request(req).pipe(
+        catchError(e=> {
+          if(this.isNoAutorizado(e)){
+            return throwError(e);
+          }
+        })
+      );
+    } catch (error) {
+      return error;
+    }
+  }
 }
+
+

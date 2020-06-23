@@ -9,17 +9,23 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { SharedModuleModule } from './components/shared-module/shared-module.module';
+import { UsuariosModule } from './components/usuarios/usuarios.module';
+import { HomeComponent } from './components/home/home.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    LayoutComponent
+    LayoutComponent,   
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    SharedModuleModule
+    SharedModuleModule,
+    UsuariosModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

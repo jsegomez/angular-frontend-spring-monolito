@@ -6,14 +6,20 @@ import { ClientesComponent } from './components/clientes/clientes.component';
 import { DetalleClienteComponent } from './components/detalle-cliente/detalle-cliente.component';
 import { BuscarClienteComponent } from './components/buscar-cliente/buscar-cliente.component';
 import { FormClientesComponent } from './components/form-clientes/form-clientes.component';
-
+import { LayoutComponent } from '../layout/layout.component';
 
 const routes: Routes = [
-  { path: 'pagina/:id',                 component:  ClientesComponent        },
-  { path: 'detalle/:id',      component:  DetalleClienteComponent  },
-  { path: 'buscar',           component:  BuscarClienteComponent   },
-  { path: 'formulario',       component:  FormClientesComponent    },
-  { path: 'formulario/:id',   component:  FormClientesComponent    },
+  {
+    path: '', 
+    component: LayoutComponent,
+    children:[
+      { path: 'pagina/:id',     component: ClientesComponent },
+      { path: 'detalle/:id',    component: DetalleClienteComponent },
+      { path: 'buscar',         component: BuscarClienteComponent },
+      { path: 'formulario',     component: FormClientesComponent },
+      { path: 'formulario/:id', component: FormClientesComponent },
+    ]
+  }
 ];
 
 @NgModule({

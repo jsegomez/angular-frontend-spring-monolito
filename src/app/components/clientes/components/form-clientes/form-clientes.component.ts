@@ -4,6 +4,7 @@ import { Cliente } from 'src/app/models/cliente';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2'
+import { Region } from '../../../../models/region';
 
 @Component({
   selector: 'app-form-clientes',
@@ -18,54 +19,41 @@ export class FormClientesComponent implements OnInit {
     private idRuta: ActivatedRoute
   ) { }
 
+  // Variables de componente
   cliente: Cliente = new Cliente();
+  imagen: File;
+  mostrarBoton = false;
+  regiones: Region[];
 
   ngOnInit(): void {
     this.cargarCliente();
   }
 
   // Carga un cliente por ID en ruta URL
-  cargarCliente(): void{
+  cargarCliente(): void {
     this.idRuta.params.subscribe(
       params => {
         const id = params.id;
-        if(id){
+        if (id) {
           this.servicioCliente.getCliente(id).subscribe(
-            cliente => this.cliente = cliente
+            cliente => {
+              this.cliente = cliente
+            },
           )
         }
       }
-    )
-  }
-
-  // Método para actualizar un cliente
-  update(formulario: NgForm){
-    if(formulario.invalid){
-      Object.values(formulario.controls).forEach(
-        control => {
-          control.markAllAsTouched()
-        }
-      )
-      return;
-    }
-
-    this.servicioCliente.update(this.cliente).subscribe(
-      respuesta => {
-        this.router.navigate([`clientes/detalle/${respuesta.cliente.id}`]);
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: `Cliente ${respuesta.cliente.nombre} actualizado con éxito`,
-          showConfirmButton: true,
-          timer: 2500
-        });
+    );
+    this.servicioCliente.getRegiones().subscribe(
+      resultado => {
+        this.regiones = resultado;
       }
-    )
+    );
+
   }
 
   // Método para crear un cliente nuevo
-  create(formulario: NgForm): void{
-    if(formulario.invalid){
+  create(formulario: NgForm): void {
+    if (formulario.invalid) {
       Object.values(formulario.controls).forEach(
         control => {
           control.markAllAsTouched()
@@ -88,4 +76,35 @@ export class FormClientesComponent implements OnInit {
     )
   }
 
+  // Método para actualizar un cliente
+  update(formulario: NgForm) {
+    if (formulario.invalid) {
+      Object.values(formulario.controls).forEach(
+        control => {
+          control.markAllAsTouched()
+        }
+      )
+      return;
+    }
+
+    this.servicioCliente.update(this.cliente).subscribe(
+      respuesta => {
+        this.router.navigate([`clientes/detalle/${respuesta.cliente.id}`]);
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: `Cliente ${respuesta.cliente.nombre} actualizado con éxito`,
+          showConfirmButton: true,
+          timer: 2500
+        });
+      }
+    )
+  }
+
+  compararRegion(o1: Region, o2: Region) {
+    if (o1 === undefined && o2 === undefined) {
+      return true;
+    }
+    return o1 == null || o2 == null ? false : o1.id === o2.id;
+  }
 }

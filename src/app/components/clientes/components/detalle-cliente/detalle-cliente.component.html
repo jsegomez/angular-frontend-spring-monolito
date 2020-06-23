@@ -1,40 +1,63 @@
-<div class="card animated fadeIn espacio">
-    <div class="card-header bg-primary">
-      <h4 class="text-center text-white">Detalle de cliente</h4>
-    </div>
-    <div class="card-body row align-items-center justify-content-center">
-      <div class="col-12 col-md-12 col-lg-6" align="center">
-        <img src="assets/images/user.png" alt="" class="img-fluid" width="300px">
+<div class="card animated fadeIn espacio" *ngIf="cliente.region != null">
+  <div class="card-header bg-primary">
+    <h4 class="text-center text-white">Detalle de cliente</h4>
+  </div>
+  <div class="card-body row align-items-center justify-content-center">
+    <div class="col-12 col-lg-6" align="center">
+      <img src="assets/images/user.png" alt="" class="img-fluid d-block rounded" width="200px"
+        *ngIf="cliente.foto == null">
+      <img src="http://localhost:8080/api/upload/img/{{ cliente.foto }}" alt="" class="img-fluid d-block rounded"
+        width="200px" *ngIf="cliente.foto !== null">
+
+      <button type="button" class="btn btn-outline-primary d-block btn-sm mt-2 py-0" data-toggle="modal"
+        data-target="#cambiarImagen">
+        Cambiar foto
+      </button>
+
+
+      <div class="mt-2 mb-3 mb-md-0" *ngIf="cargandoArchivo">
+        Progreso de carga:
+        <div class="progress" style="width: 220px;">
+          <div class="progress-bar" role="progressbar" [ngStyle]="{width: progresoCarga + '%'}"
+            attr.aria-valuenow="{{ progresoCarga }}" aria-valuemin="0" aria-valuemax="100">{{ progresoCarga }}%
+          </div>
+        </div>
       </div>
 
-      <div class="col-12 col-md-12 col-lg-6 mt-0 mt-md-4">
-        <table class="table">
-          <tbody>
-            <tr>
-              <th scope="row">Id</th>
-              <td>{{ cliente.id }}</td>
-            </tr>
-            <tr>
-              <th scope="row">Nombres</th>
-              <td>{{ cliente.nombre }}</td>
-            </tr>
-            <tr>
-              <th scope="row">Apellidos</th>
-              <td>{{ cliente.apellido }}</td>
-            </tr>
-            <tr>
-              <th scope="row">Correo</th>
-              <td>{{ cliente.email }}</td>
-            </tr>
-            <tr>
-              <th scope="row">Registrado</th>
-              <td>{{ cliente.createAt | date:'dd-MM-yyyy'}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    </div>
+
+    <div class="col-12 col-md-12 col-lg-6 mt-0 mt-md-4">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th scope="row">Id</th>
+            <td>{{ cliente.id }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Nombres</th>
+            <td>{{ cliente.nombre }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Apellidos</th>
+            <td>{{ cliente.apellido }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Correo</th>
+            <td>{{ cliente.email }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Región</th>
+            <td>{{ cliente.region.nombre }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Registrado</th>
+            <td>{{ cliente.createAt | date:'dd-MM-yyyy'}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+</div>
 
 <div class="container">
   <div class="row justify-content-center">
@@ -42,7 +65,41 @@
       <button class="btn btn-primary btn-block" [routerLink]="['/clientes/pagina/0']">Regresar</button>
     </div>
     <div class="col-12 col-md-4 col-lg-2 mb-2 mb-md-0">
-      <button class="btn btn-danger btn-block" [routerLink]="['/clientes/formulario/', cliente.id]">Editar</button>
-    </div>        
+      <button class="btn btn-danger btn-block" [routerLink]="['/clientes/formulario/', cliente.id]">Editar
+        datos</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="cambiarImagen" tabindex="-1" role="dialog" aria-labelledby="cambiarImagenLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cambiarImagenLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="input-group">
+          <div class="custom-file">
+            <input (change)="cargarFoto($event)" type="file" class="custom-file-input" id="imagen">
+            <label class="custom-file-label" for="imagen">{{ textoInput }}</label>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="imagen == null"
+          (click)="subirFoto()">
+          Guardar
+        </button>
+
+      </div>
+    </div>
   </div>
 </div>
